@@ -1,7 +1,12 @@
 using Claims.Auditing;
 using Claims.Controllers;
+using Claims.Core.Interfaces;
+using Claims.Core.Services;
+using Claims.Infrastructure.Data;
+using Claims.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
 using Testcontainers.MongoDb;
@@ -42,9 +47,21 @@ builder.Services.AddDbContext<ClaimsContext>(options =>
     options.UseMongoDB(database.Client, database.DatabaseNamespace.DatabaseName);
 });
 
+builder.Services.AddSingleton<IAuditQueue, AuditQueue>();
+builder.Services.AddScoped<IAuditer, Auditer>();
+builder.Services.AddHostedService<AuditBackgroundWorker>();
+
+builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
+builder.Services.AddScoped<ICoverRepository, CoverRepository>();
+builder.Services.AddScoped<ICoverCalculator, CoverCalculator>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 var app = builder.Build();
 
