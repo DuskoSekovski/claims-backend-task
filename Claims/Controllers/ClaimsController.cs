@@ -51,20 +51,20 @@ namespace Claims.Controllers
             _logger.LogInformation($"Processing creation request for a new claim named {claim.Name} with Cover ID: {claim.CoverId}.");
 
             if (claim == null)
-            {
+        {
                 _logger.LogWarning("Claim creation aborted: Request payload was null.");
                 return BadRequest("Claim data cannot be null.");
-            }
+        }
 
             var relatedCover = await _coverRepository.GetCoverAsync(claim.CoverId);
             if(relatedCover == null)
-            {
+        {
                 _logger.LogWarning($"Claim creation rejected: Cover ID {claim.CoverId} could not be found in the database.");
                 return BadRequest($"The related Cover with ID {claim.CoverId} does not exist.");
-            }
+    }
 
             if (claim.Created < relatedCover.StartDate || claim.Created > relatedCover.EndDate)
-            {
+    {
                 _logger.LogWarning($"Claim creation rejected: Claim date {claim.Created} sits outside active Cover period ({relatedCover.StartDate} to {relatedCover.EndDate}).");
                 return BadRequest($"The claim creation date must be between the related cover's period ({relatedCover.StartDate:yyyy-MM-dd} to {relatedCover.EndDate:yyyy-MM-dd}).");
             }
@@ -103,10 +103,10 @@ namespace Claims.Controllers
 
             var claim = await _claimsRepository.GetClaimAsync(id);
             if (claim == null)
-            {
+        {
                 _logger.LogWarning($"Claim retrieval failed: Claim with ID {id} was not found.");
                 return NotFound();
-            }
+        }
 
             _logger.LogInformation($"Claim details retrieved for ID: {id}.");
             return Ok(claim);

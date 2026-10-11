@@ -128,7 +128,7 @@ namespace Claims.Tests
 
         [Fact]
         public async Task CreateAsync_ShouldReturnBadRequest_WhenClaimCreatedDateIsBeforeCoverStartDate()
-        {
+    {
             // ARRANGE
             var fakeCover = ValidCoverBlueprint;
             fakeCover.StartDate = DateTime.UtcNow.AddMonths(1);

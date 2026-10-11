@@ -95,13 +95,12 @@ public class CoversController : ControllerBase
         _logger.LogInformation($"Initiating cover registration for type: {cover.Type} .");
 
         if (cover.StartDate < DateTime.UtcNow.Date)
-        //if (cover.StartDate < DateOnly.FromDateTime(DateTime.UtcNow.Date))
         {
             _logger.LogWarning($"Cover validation failed: Start date {cover.StartDate} cannot be set in the past.");
             return BadRequest("The cover start date cannot be in the past.");
         }
 
-        if(cover.EndDate > cover.StartDate.AddYears(1))
+        if (cover.EndDate > cover.StartDate.AddYears(1))
         {
             _logger.LogWarning($"Cover validation failed: Requested period crosses the 1-year threshold. Start date: {cover.StartDate}, End date: {cover.EndDate}).");
             return BadRequest("The total cover period cannot exceed 1 year.");
@@ -133,6 +132,6 @@ public class CoversController : ControllerBase
         _auditer.AuditCover(id, "DELETE");
         await _coverRepository.DeleteCoverAsync(id);
         _logger.LogInformation($"Cover with ID {id} was successfully deleted and audited.");
-        return NoContent();        
+        return NoContent();
     }
 }

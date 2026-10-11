@@ -31,40 +31,44 @@ namespace Claims.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("HttpRequestType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("ClaimAudits");
                 });
-
+            
             modelBuilder.Entity("Claims.Auditing.CoverAudit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CoverId")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("CoverId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("Created")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("HttpRequestType")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("HttpRequestType")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("CoverAudits");
-                });
+                b.ToTable("CoverAudits");
+            });
 #pragma warning restore 612, 618
         }
     }
