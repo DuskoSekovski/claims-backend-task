@@ -49,5 +49,23 @@ namespace Claims.Tests
             // ASSERT
             Assert.Equal(54312.5m, premium);
         }
+
+        [Fact]
+        public void ComputePremium_ShouldApplyTier3Discount_ForDaysAbove181()
+        {
+            // ARRANGE: 200 Days for a Container Ship. 
+            // First 30 days: 30 * 1625 = 48750
+            // Next 150 days: 150 * (1625 - 2%) = 150 * 1592.5 = 238875
+            // Remaining days: 20 * (1625 - 3%) = 20 * 1576.25 = 31525
+            // Total expected = 54312.5
+            var start = DateTime.UtcNow.Date;
+            var end = start.AddDays(200);
+
+            // ACT
+            var premium = _calculator.ComputePremium(start, end, CoverType.ContainerShip);
+
+            // ASSERT
+            Assert.Equal(319150m, premium);
+        }
     }
 }
